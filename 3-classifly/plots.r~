@@ -1,0 +1,4 @@
+library(DescribeDisplay)
+d<-dd_load("svm-radial-1.r")
+plot(d, axislocation=c(0.85,0.15))
+

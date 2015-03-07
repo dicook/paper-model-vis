@@ -1,0 +1,52 @@
+8
+
+dir
+6681
+svn://ggobi.org/ggobi/papers/2009-model-vis/1-data
+svn://ggobi.org/ggobi
+
+
+
+2009-07-08T15:16:44.909140Z
+6360
+dicook
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+478a9d2e-6004-0410-ac81-b4d184805fe2
+
+wine.r
+file
+
+
+
+
+2009-07-07T16:47:44.000000Z
+9dad481fbad01248da79201395ff24d6
+2009-07-08T15:16:44.909140Z
+6360
+dicook
+
+wine.csv
+file
+
+
+
+
+2009-04-15T22:11:39.000000Z
+acf32d438c574a329e363583ce7328ea
+2009-04-15T19:11:41.879892Z
+6159
+hadley
+

@@ -1,0 +1,6 @@
+library(DescribeDisplay)
+d<-dd_load("projection-1.r")
+d<-dd_load("projection-2.r")
+d$plots[[1]]$points$cex<-0.8
+plot(d, axislocation=c(0.85,0.85))
+
