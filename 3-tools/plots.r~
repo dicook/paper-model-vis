@@ -1,2 +1,0 @@
-library(DescribeDisplay)
-d<-dd_load("projection-1.r")
