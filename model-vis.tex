@@ -12,6 +12,10 @@
 \definecolor{slateblue}{rgb}{0.07,0.07,0.488}
 \hypersetup{colorlinks=true,linkcolor=slateblue,anchorcolor=slateblue,citecolor=slateblue,filecolor=slateblue,urlcolor=slateblue,bookmarksnumbered=true,pdfview=FitB}
 
+\usepackage[usenames,dvipsnames]{xcolor}
+\newcommand{\hh}[1]{{\color{ForestGreen} #1}}
+
+
 \usepackage[small]{caption}
 \usepackage{url}
 \usepackage[round,sort&compress,sectionbib]{natbib}
@@ -90,7 +94,7 @@ Visual model descriptions are a particularly important adjunct to numerical summ
 
 \end{itemize}
 
-\noindent If we can't easily ask and answer these questions, our ability to understand and criticize models is constrained, and our view of the underlying phenomenon flawed. This may not matter if we only care about accurate predictions, but better understanding of the underlying science will usually enhance generalization.
+\noindent If we cannot easily ask and answer these questions, our ability to understand and criticize models is constrained, and our view of the underlying phenomenon flawed. This may not matter if we only care about accurate predictions, but better understanding of the underlying science will usually enhance generalization.
 
 As well as facilitating good science, model visualization (model-vis) can also be used to enhance teaching and research. Pedagogically, it gives students another way of understanding newly encountered methods. Using modern interactive methods students can become experimental scientists studying a model; systematically varying the input and observing the model output. Model-vis can also be useful in the development of new theory; seeing where a model or a class of models performs poorly may suggest avenues for new research.
 
@@ -123,6 +127,7 @@ Converting data-vis methods to model-vis methods is not always straightforward. 
 \end{itemize}
 
 The importance of a strong connection between statistical models and visual exploration has been recognized and incorporated into statistical software: Lisp-Stat \citep{tierney:1990}, {\tt rggobi} and its ancestors of \citep{swayne:1991}, Datadesk \citep{velleman:1992}, ViSta \citep{young:1993}, {\sc arc} \citep{cook:1998}, Mondrian \citep{theus:2003}, iplots \citep{iplots}, Klimt \citep{urbanek:2002a} and Gauguin \citep{gribov:2007}. This paper builds upon these ideas to shape a consistent strategy for the design of model visualizations.
+\hh{XXX this list of software definitely needs some updating - I am just not completely sure on what criteria this list of software was based on in the first place? It might be better to include those references in the tools sections, and split the software packages up according to what they can do.  Tableau, cranvas, d3, software from Shneiderman lab, Wattenberg,  animint, ggvis, cranvas}
 
 The paper is structured into sections corresponding to these three principles. Each section contains examples of the principles for particular models. Section~\ref{sec:m-in-ds} describes the technique of displaying the model-in-data space, illustrated with examples from {\sc manova}, classification models and hierarchical clustering \citep{JW02}, and contrasts m-in-ds against the more common approach of displaying the data-in-model space. Section~\ref{sec:collections} explains the benefit of visualizing collections of multiple models, rather than just a single ``best'' model, illustrated with an ensemble of linear models. Section~\ref{sec:iteration} shows how we can visualize an iterative model-fitting process, using examples from projection pursuit \citep{friedman:1974,huber:1985} and self-organizing maps \citep{kohonen:2001}. Finally, Section~\ref{sec:nnet} shows how the three strategies can be used in concert to visualize a neural network.
 
@@ -146,11 +151,11 @@ The following sections introduce our terminology for models, and describes the p
 
 \begin{itemize}
 
-  \item The {\bf model family} describes, at the broadest possible level, the connection between the variables of interest. For example, the linear model predicts a single continuous response with a linear combination of predictor variables, and assumes normally distributed error: $Y | X \sim \Normal(\mu = AX, \sigma)$. The model family is almost always specified by the statistical problem (i.e., you can't use a test to determine whether you should use a linear model or model-based clustering).
+  \item The {\bf model family} describes, at the broadest possible level, the connection between the variables of interest. For example, the linear model predicts a single continuous response with a linear combination of predictor variables, and assumes normally distributed error: $Y | X \sim \Normal(\mu = AX, \sigma)$. The model family is almost always specified by the statistical problem (i.e., you cannot use a test to determine whether you should use a linear model or model-based clustering).
 
-  \item The {\bf model form} specifies exactly how the variables of interest are connected within the framework of the model family. For example, the model form of a linear model specifies which variable is the response, and which variables are the predictors, e.g.,\ $height | age, sex \sim \Normal(\mu = b + a_1 \cdot age + a_2 \cdot sex, \sigma)$. The model form might be specified a priori by the statistician, or chosen by a model-selection procedure.
+  \item The {\bf model form} specifies exactly how the variables of interest are connected within the framework of the model family. For example, the model form of a linear model specifies which variable is the response, and which variables are the predictors, e.g.,\ $height  \mid age, sex \sim \Normal(\mu = b + a_1 \cdot age + a_2 \cdot sex, \sigma)$. The model form might be specified a priori by the statistician, or chosen by a model-selection procedure.
 
-  \item The {\bf fitted model} is a concrete instance of the model form where all parameters have been estimated from data, and the model can be used to generate predictions. For example, $height | age, sex \sim \Normal(\mu = 10 + 5 \cdot age + 3 \cdot sex, \sigma = 4)$. Typically, the fitted model optimizes some criterion for the given data, e.g., the linear model minimizes the total squared deviation between responses and predictions.
+  \item The {\bf fitted model} is a concrete instance of the model form where all parameters have been estimated from data, and the model can be used to generate predictions. For example, $height \mid age, sex \sim \Normal(\mu = 10 + 5 \cdot age + 3 \cdot sex, \sigma = 4)$. Typically, the fitted model optimizes some criterion for the given data, e.g., the linear model minimizes the total squared deviation between responses and predictions.
 
   % If there is not a global optimum, the fitted model will not be unique, and often the uncertainty in our estimation of the criteria means that
   %
@@ -162,7 +167,7 @@ Bayesian models can be described in a similar manner, although there we tend to 
 
 Not all techniques used by statisticians have these explicit probabilistic models, but the basic breakdown remains the same.  For example, neural networks are a model family, the model form specifies the variables and number of nodes, and the fitted model will have estimates for the parameters of each node.  Neural networks are a good example of where going from the model form to the fitted model is difficult.  We must use numerical methods, and convergence to a global optimum is not guaranteed.  This means that to find the ``best'' fitted model (i.e.,\ the model with the highest criterion value) we need multiple random starts.  We will come back to this in Section~\ref{sec:nnet}.
 
-Knowing the model family and form does not guarantee we know what the fitted model looks like.  For example, the parameters of the linear model can be interpreted as the change in the response when the predictor is changed by one unit, if all other variables are held constant.  This seems easy to interpret, but most models have interdependencies between the predictors which means variables do not change independently, as with interactions or polynomial terms.  For more complex models, there may never be any direct interpretation of any of the model parameters.  For example, in generalized additive models \citep{wood:2006}, knowing the form of the model and the parameter values does not give us insight into what the model says about the data.
+Knowing the model family and form does not guarantee we know what the fitted model looks like.  For example, the parameters of the linear model can be interpreted as the change in the response when the predictor is changed by one unit, if all other variables are held constant.  This seems easy to interpret, but most models have interdependencies between the predictors, such as interactions or polynomial terms,  which means variables do not change independently.  For more complex models, there may never be any direct interpretation of any of the model parameters.  For example, in generalized additive models \citep{wood:2006}, knowing the form of the model and the parameter values does not give us insight into what the model says about the data.
 
 \subsection{Tools for visualizing high-d data and models}
 
@@ -311,7 +316,7 @@ These ideas are implemented in the R package {\tt classifly} \citep{classifly}, 
 \subsection{Case study: Hierarchical clustering}
 \label{sub:hierarchical}
 
-Agglomerative hierarchical clustering methods \citep{hartigan:1975a} build up clusters point by point, iteratively joining the two closest points or clusters. The most common visualization of a hierarchical clustering is a dendrogram, a d-in-ms display. There are also a number of other methods of this type: icicles \citep{kruskal:1983}, silhouettes \citep{trauwaert:1989} and clustergrams \citep{schonlau:2002}. Figure~\ref{fig:wine-dendro} shows two dendrograms produced by clustering the wine dataset with Wards linkage and single linkage. These dendrograms aren't very informative. For the Wards clustering we can see that there are three major clusters, and for single linkage the clusters seem to grow mainly by adding a single point to an existing cluster. We can't see what the clusters have in common, or what variables are important for the clustering.
+Agglomerative hierarchical clustering methods \citep{hartigan:1975a} build up clusters point by point, iteratively joining the two closest points or clusters. The most common visualization of a hierarchical clustering is a dendrogram, a d-in-ms display. There are also a number of other methods of this type: icicles \citep{kruskal:1983}, silhouettes \citep{trauwaert:1989} and clustergrams \citep{schonlau:2002}. Figure~\ref{fig:wine-dendro} shows two dendrograms produced by clustering the wine dataset with Wards linkage and single linkage. These dendrograms aren't very informative. For the Wards clustering we can see that there are three major clusters, and for single linkage the clusters seem to grow mainly by adding a single point to an existing cluster. We cannot see what the clusters have in common, or what variables are important for the clustering.
 
 % This requires a distance metric, and a method for calculating the distance between two clusters (linkage).  There are a number of common methods:  use the closest distance (simple linkage), the largest distance (complete linkage), the average distance ({\sc upgma}), or the distance between cluster centroids (Ward's).  Each of these methods finds clusters of somewhat different shapes: single linkage forms long skinny clusters, average linkage forms more spherical clusters.
 
