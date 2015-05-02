@@ -94,7 +94,7 @@ Visual model descriptions are a particularly important adjunct to numerical summ
 
 \end{itemize}
 
-\noindent If we cannot easily ask and answer these questions, our ability to understand and criticize models is constrained, and our view of the underlying phenomenon flawed. This may not matter if we only care about accurate predictions, but better understanding of the underlying science will usually enhance generalization.
+\noindent If we cannot easily ask and answer these questions, our ability to understand and criticize models is constrained, and our view of the underlying phenomenon flawed. This may not matter if we only care about accurate predictions, but better understanding of the underlying science  usually enhances generalization.
 
 As well as facilitating good science, model visualization (model-vis) can also be used to enhance teaching and research. Pedagogically, it gives students another way of understanding newly encountered methods. Using modern interactive methods students can become experimental scientists studying a model; systematically varying the input and observing the model output. Model-vis can also be useful in the development of new theory; seeing where a model or a class of models performs poorly may suggest avenues for new research.
 
@@ -114,11 +114,11 @@ Converting data-vis methods to model-vis methods is not always straightforward. 
   data produced by the model, we expect to better understand the fit.
 
 \item Look at all members of a collection, not just
-  one.  Exploring multiple models will usually give more insight into
+  one.  Exploring multiple models  usually gives more insight into
   the data and the relative merits of different models. This is
   analogous to the way that studying many local optima may give more
   complete insight than a single global optimum, or the way that
-  multiple summary statistics is more informative than one alone.
+  multiple summary statistics are more informative than one alone.
 
 \item Explore the process of fitting, not just the
   end result.  Understanding how the algorithm works allows us to
@@ -134,7 +134,7 @@ The paper is structured into sections corresponding to these three principles. E
 \section{Background}
 \label{sec:model}
 
-The following sections introduce our terminology for models, and describes the particular visual methods that we will use repeatedly in this paper.
+The following sections introduce our terminology for models, and describes the particular visual methods that we  use repeatedly in this paper.
 
 % Why are interactive and dynamic graphics necessary?
 
@@ -151,9 +151,9 @@ The following sections introduce our terminology for models, and describes the p
 
 \begin{itemize}
 
-  \item The {\bf model family} describes, at the broadest possible level, the connection between the variables of interest. For example, the linear model predicts a single continuous response with a linear combination of predictor variables, and assumes normally distributed error: $Y | X \sim \Normal(\mu = AX, \sigma)$. The model family is almost always specified by the statistical problem (i.e., you cannot use a test to determine whether you should use a linear model or model-based clustering).
+  \item The {\bf model family} describes, at the broadest possible level, the connection between the variables of interest. For example, the linear model predicts a single continuous response with a linear combination of predictor variables, and assumes normally distributed error: $Y | X \sim \Normal(\mu = X\beta, \sigma)$. The model family is almost always specified by the statistical problem (i.e., you cannot use a test to determine whether you should use a linear model or model-based clustering).
 
-  \item The {\bf model form} specifies exactly how the variables of interest are connected within the framework of the model family. For example, the model form of a linear model specifies which variable is the response, and which variables are the predictors, e.g.,\ $height  \mid age, sex \sim \Normal(\mu = b + a_1 \cdot age + a_2 \cdot sex, \sigma)$. The model form might be specified a priori by the statistician, or chosen by a model-selection procedure.
+  \item The {\bf model form} specifies exactly how the variables of interest are connected within the framework of the model family. For example, the model form of a linear model specifies which variable is the response, and which variables are the predictors, e.g.,\ $height  \mid age, sex \sim \Normal(\mu = \beta_0 + \beta_1 \cdot age + \beta_2 \cdot sex, \sigma)$. The model form might be specified a-priori by the statistician, or chosen by a model-selection procedure.
 
   \item The {\bf fitted model} is a concrete instance of the model form where all parameters have been estimated from data, and the model can be used to generate predictions. For example, $height \mid age, sex \sim \Normal(\mu = 10 + 5 \cdot age + 3 \cdot sex, \sigma = 4)$. Typically, the fitted model optimizes some criterion for the given data, e.g., the linear model minimizes the total squared deviation between responses and predictions.
 
@@ -165,7 +165,7 @@ The following sections introduce our terminology for models, and describes the p
 
 Bayesian models can be described in a similar manner, although there we tend to focus on the distributions of the parameters given the data, rather than a single estimated value.
 
-Not all techniques used by statisticians have these explicit probabilistic models, but the basic breakdown remains the same.  For example, neural networks are a model family, the model form specifies the variables and number of nodes, and the fitted model will have estimates for the parameters of each node.  Neural networks are a good example of where going from the model form to the fitted model is difficult.  We must use numerical methods, and convergence to a global optimum is not guaranteed.  This means that to find the ``best'' fitted model (i.e.,\ the model with the highest criterion value) we need multiple random starts.  We will come back to this in Section~\ref{sec:nnet}.
+Not all techniques used by statisticians have these explicit probabilistic models, but the basic breakdown remains the same.  For example, neural networks are a model family, the model form specifies the variables and number of nodes, and the fitted model has estimates for the parameters of each node.  Neural networks are a good example of where going from the model form to the fitted model is difficult.  We must use numerical methods, and convergence to a global optimum is not guaranteed.  This means that to find the ``best'' fitted model (i.e.,\ the model with the highest criterion value) we need multiple random starts.  We will come back to this in Section~\ref{sec:nnet}.
 
 Knowing the model family and form does not guarantee we know what the fitted model looks like.  For example, the parameters of the linear model can be interpreted as the change in the response when the predictor is changed by one unit, if all other variables are held constant.  This seems easy to interpret, but most models have interdependencies between the predictors, such as interactions or polynomial terms,  which means variables do not change independently.  For more complex models, there may never be any direct interpretation of any of the model parameters.  For example, in generalized additive models \citep{wood:2006}, knowing the form of the model and the parameter values does not give us insight into what the model says about the data.
 
@@ -173,7 +173,7 @@ Knowing the model family and form does not guarantee we know what the fitted mod
 
 To visualize data and models in many dimensions, we need good tools. While it is possible to investigate high-d objects with only static graphics, it is much easier to do so interactively. We will use two basic tools extensively: the grand tour, to look at many projections of the data; and linked brushing, to look at many sections of the data. These tools are described briefly below, and in more detail in \citet{cook:2007}. % Other tools, such as the parallel coordinate plot \citep{inselberg:1985,wegman:1990}, are also useful, but we prefer the tour because for low to moderate-d it gives a more immediately interpretable view of the data.
 
-\paragraph{The grand tour} When we have a 3D object, how do we figure out what shape it is?  We pick it up and look at it from multiple sides, joining a sequence of 2d views into a 3D model.  The grand tour generalizes this idea to more than 2D, generating a sequence of 2d projections of an $p$-d object.  It chooses new projections randomly and smoothly rotates between them.  The new projections are selected at random so that if we watch the tour long enough we'll see every possible view, but we'll never get stuck in the same uninteresting region for long.  Among other things, the grand tour can be used to identify multivariate outliers and clusters in the data, as the snapshots in Figure~\ref{fig:projection} illustrate. The plots in Figure ~\ref{fig:projection} show projections from a grand tour of the wine data from \citet{asuncion:2007}. This dataset contains information on 178 wines made from three varieties of grapes, with 13 variables describing physical composition (including chemical constituents and wine color). Just four variables are entered into the grand tour (alcohol, flavonoids, phenols, dilution) and the points are colored by the grape variety. In these two projections the groups are reasonably well-separated suggesting that they are distinguishable based on the variables in the data set. This data is used several times during the paper for illustrating different ideas. A variant of the grand tour is the guided tour, where new projections are selected according to an index of interestingness, and is described in Section~\ref{sub:guided}.
+\paragraph{The grand tour} When we have a 3D object, how do we figure out what shape it is?  We pick it up and look at it from multiple sides, joining a sequence of 2d views into a 3D model.  The grand tour generalizes this idea to more than 2D, generating a sequence of 2d projections of an $p$-d object.  It chooses new projections randomly and smoothly rotates between them.  The new projections are selected at random so that if we watch the tour long enough we will see every possible view, but we will never get stuck in the same uninteresting region for long.  Among other things, the grand tour can be used to identify multivariate outliers and clusters in the data, as the snapshots in Figure~\ref{fig:projection} illustrate. The plots in Figure ~\ref{fig:projection} show projections from a grand tour of the wine data from \citet{asuncion:2007}. This dataset contains information on 178 wines made from three varieties of grapes, with 13 variables describing physical composition (including chemical constituents and wine color). Just four variables are entered into the grand tour (alcohol, flavonoids, phenols, dilution) and the points are colored by the grape variety. In these two projections the groups are reasonably well-separated suggesting that they are distinguishable based on the variables in the data set. This data is used several times during the paper for illustrating different ideas. A variant of the grand tour is the guided tour, where new projections are selected according to an index of interestingness, and is described in Section~\ref{sub:guided}.
 
 % A limitation of the grand tour is that it is only useful for continuous variables.  Conditioning is useful for exploring a few categorical variables, but if the data contains many categorical variables, it will be necessary to use more specialized tools such as the mosaic plot \citep{hartigan:1981,hofmann:2000}.
 
@@ -197,7 +197,7 @@ To visualize data and models in many dimensions, we need good tools. While it is
   \includegraphics[height=2.5in]{4-meifly/houses-brushing5.png}
   \includegraphics[height=2.5in]{4-meifly/houses-brushing6.png}
 
-	\caption{Selecting a single observation (red rectangle) highlights the values of that observation for all models (left) and in the raw data (right).}
+	\caption{Selecting a single observation (red rectangle, top left) highlights the values of that observation for all models (left) and in the raw data (right).}
 	\label{fig:brushing}
 \end{figure}
 
@@ -218,7 +218,7 @@ A major theme of this paper is the importance of visualizing the model in the co
 
 To compare these approaches, think of a linear model. One of the most common diagnostics is a plot of fitted values versus residuals. This is a d-in-ms display because we are plotting summary statistics from the model in a low-d view. An m-in-ds approach would be to generate the full regression surface, and visualize it in the context of the data; this is hard, but often revealing. For an m-in-ds approach, we can still use the residuals, but we would want to see them in the context of the entire predictor space. For categorical predictors, another m-in-ds approach would be to use population marginal means \citep{searle:1980} to summarize the categorical coefficients in such a way that they are interpretable in the data space.
 
-Representing the model as data is challenging and requires some creativity and imagination. You can draw inspiration from existing d-in-ms plots, but otherwise coming up with a good representation requires some thinking and experimentation. First, it's worth considering what a model embedded in the data space will look like. We can say a few things about the form of models in general because almost all models share two important characteristics: they summarize the data and interpolate the data space. This means that the model will have many fewer dimensions than the data, and it will take values over the entire data space, even where there are no data. This implies that many models are manifolds, or high-d surfaces.
+Representing the model as data is challenging and requires some creativity and imagination. You can draw inspiration from existing d-in-ms plots, but otherwise coming up with a good representation requires some thinking and experimentation. First, it's worth considering what a model embedded in the data space  looks like. We can say a few things about the form of models in general because almost all models share two important characteristics: they summarize the data and interpolate the data space. This means that the model will have many fewer dimensions than the data, and it will take values over the entire data space, even where there are no data. This implies that many models are manifolds, or high-d surfaces.
 
 % visualizing the model in the data space clearly poses challenges when we have many more variables than observations.  The number of possible views of the data is overwhelming, making it difficult to assess how well the model summarizes the data.  Until good graphical tools for very high-d data are developed, we will have to rely on our intuition that better understanding the algorithm in low-d, where we can comprehend both model and data, gives insight into potential problems in high-d.
 
@@ -233,7 +233,7 @@ The following three case studies highlight some of these different techniques: f
 \subsection{Case study: MANOVA}
 \label{sub:manova}
 
-{\sc Manova} is a multivariate extension of {\sc anova} where there are multiple continuous responses instead of just one.  Correspondingly, the error distribution of {\sc manova} is the multivariate normal, with mean 0 and variance-covariance matrix $\Sigma$. Because {\sc manova} looks at response variables simultaneously it can identify differences that individual {\sc anova}s cannot, as illustrated by Figure~\ref{fig:manova-ex}.
+{\sc Manova} is a multivariate extension of {\sc anova} where there are multiple continuous responses instead of just one.  Correspondingly, the error distribution of {\sc manova} is the multivariate normal, with mean vector 0 and variance-covariance matrix $\Sigma$. Because {\sc manova} looks at response variables simultaneously it can identify differences that individual {\sc anova}s cannot, as illustrated by Figure~\ref{fig:manova-ex}.
 
 \begin{figure}[htb]
   \centering
@@ -244,11 +244,11 @@ The following three case studies highlight some of these different techniques: f
   \label{fig:manova-ex}
 \end{figure}
 
-This case study explores adding {\sc manova} model information to the raw data. We will investigate a simple {\sc manova} with a single categorical explanatory variable, and discuss how we might extend the ideas to the general multivariate linear model. In this simple case, the model is that each group is multivariate normal with the same variance-covariance matrix. To summarize this model we'll display a 95\% confidence region around the mean.
+This case study explores adding {\sc manova} model information to the raw data. We  investigate a simple {\sc manova} with a single categorical explanatory variable, and discuss how we might extend the ideas to the general multivariate linear model. In this simple case, we model each group using a multivariate normal with the same variance-covariance matrix. To summarize this model we  display a 95\% confidence region around each of the means.
 
 Figure~\ref{fig:manova-wine} shows the result of this approach applied to wine. As the variables are not directly comparable, they have been standardized to range $[0, 1]$.
 
-%This level was proposed by \citet{velleman:1981} as a useful heuristic for comparing two means, and it works reasonably well regardless of whether or not the two distributions have the same variance: if the two regions don't overlap then we can be fairly confident that the means are significantly different at the 5\% level.
+%This level was proposed by \citet{velleman:1981} as a useful heuristic for comparing two means, and it works reasonably well regardless of whether or not the two distributions have the same variance: if the two regions do not overlap then we can be fairly confident that the means are significantly different at the 5\% level.
 
 % Generating the points on the surface of the confidence region is straightforward.  First, we draw points from a $d$-dimensional standard multivariate normal, then project these onto the surface of a sphere by normalizing each row to distance 1.  Next, we skew this sphere to match the desired variance-covariance matrix, blow it up to give the appropriate $cl$-level confidence ellipsoid, and translate it by the group mean.  This generates a $p$-dimensional ellipsoid, which in 2D projections will look like a filled ellipse.
 
@@ -262,9 +262,9 @@ Figure~\ref{fig:manova-wine} shows the result of this approach applied to wine. 
 
 % In most cases {\sc manova} is very not interesting because the null hypothesis, that the group means are equal, is unlikely to be true.  We could make this visualization more exploratory by using group-wise covariances to relax the assumption of equal variances, or by using non-parametric density estimation to relax the assumption of normality.
 
-Extending this idea to deal with multivariate linear models is straightforward, although visualizing the resulting surfaces will be difficult.  If the model contains continuous variables, then we will no longer have point predictors of the mean, but instead, continuous functions each surrounded by a confidence region.  We can generate these confidence regions by randomly sampling the predictor space and then generating the confidence region for each sampled point as for {\sc manova}.  Visualization is complicated when we have multiple response and predictor variables as we want to keep them separate, e.g.,\ a linear combination of a predictor and a response variable probably doesn't make much sense.  A potentially useful tool here is the correlation tour \citep{buja:1996}, a version of the tour which uses separate sets of variables for the x and y axes.
+Extending this idea to deal with multivariate linear models is straightforward, although visualizing the resulting surfaces is difficult.  If the model contains continuous variables, then we  no longer have point predictors of the mean, but instead, continuous functions each surrounded by a confidence region.  We can generate these confidence regions by randomly sampling the predictor space and then generating the confidence region for each sampled point as for {\sc manova}.  Visualization is complicated when we have multiple response and predictor variables as we want to keep them separate, e.g.,\ a linear combination of a predictor and a response variable probably does not make much sense.  A potentially useful tool here is the correlation tour \citep{buja:1996}, a version of the tour which uses separate sets of variables for the x and y axes.
 
- % If only interested in certain terms of the {\sc manova}, can use population marginal means \citep{searle:1980} to marginal over the variables that aren't of interest.  We should also take care to correction for multiple comparisons (e.g.\ Scheffe's, because making all possible linear comparisons).  Correlation tour will be useful for exploring these regions because it can display a linear combination of responses on the $y$-axis, and predictors on the $x$-axis.
+ % If only interested in certain terms of the {\sc manova}, can use population marginal means \citep{searle:1980} to marginal over the variables that are not of interest.  We should also take care to correction for multiple comparisons (e.g.\ Scheffe's, because making all possible linear comparisons).  Correlation tour will be useful for exploring these regions because it can display a linear combination of responses on the $y$-axis, and predictors on the $x$-axis.
 
 \subsection{Case study: Classification models}
 \label{sub:classifly}
@@ -316,7 +316,7 @@ These ideas are implemented in the R package {\tt classifly} \citep{classifly}, 
 \subsection{Case study: Hierarchical clustering}
 \label{sub:hierarchical}
 
-Agglomerative hierarchical clustering methods \citep{hartigan:1975a} build up clusters point by point, iteratively joining the two closest points or clusters. The most common visualization of a hierarchical clustering is a dendrogram, a d-in-ms display. There are also a number of other methods of this type: icicles \citep{kruskal:1983}, silhouettes \citep{trauwaert:1989} and clustergrams \citep{schonlau:2002}. Figure~\ref{fig:wine-dendro} shows two dendrograms produced by clustering the wine dataset with Wards linkage and single linkage. These dendrograms aren't very informative. For the Wards clustering we can see that there are three major clusters, and for single linkage the clusters seem to grow mainly by adding a single point to an existing cluster. We cannot see what the clusters have in common, or what variables are important for the clustering.
+Agglomerative hierarchical clustering methods \citep{hartigan:1975a} build up clusters point by point, iteratively joining the two closest points or clusters. The most common visualization of a hierarchical clustering is a dendrogram, a d-in-ms display. There are also a number of other methods of this type: icicles \citep{kruskal:1983}, silhouettes \citep{trauwaert:1989} and clustergrams \citep{schonlau:2002}. Figure~\ref{fig:wine-dendro} shows two dendrograms produced by clustering the wine dataset with Wards linkage and single linkage. These dendrograms are not very informative. For the Wards clustering we can see that there are three major clusters, and for single linkage the clusters seem to grow mainly by adding a single point to an existing cluster. We cannot see what the clusters have in common, or what variables are important for the clustering.
 
 % This requires a distance metric, and a method for calculating the distance between two clusters (linkage).  There are a number of common methods:  use the closest distance (simple linkage), the largest distance (complete linkage), the average distance ({\sc upgma}), or the distance between cluster centroids (Ward's).  Each of these methods finds clusters of somewhat different shapes: single linkage forms long skinny clusters, average linkage forms more spherical clusters.
 
@@ -349,7 +349,7 @@ An implementation of these ideas is available in the {\tt clusterfly} package \c
 So far we have looked at visualizing a single model in the data space, but collections of models arise in many ways, and in most cases most of the models are ignored and we only look at the best model. This is perilous as we may miss alternative models that explain the data almost as well as the best model, and suggest substantially different explanations for the phenomenon of interest. A few of the ways that collections are produced include:
 
 \begin{itemize} \itemsep 0in
-  \item From exploring the space of all possible models.  For a given model family, we can generate all possible model forms, e.g., for a linear model, we can generate all possible linear models with main effects.  This will often produce too many models to possibly fit or compare, so typically we will use some model selection algorithm to explore the space of ``best'' models.  Typically, only the best, or maybe the two or three best models are examined.
+  \item From exploring the space of all possible models.  For a given model family, we can generate all possible model forms, e.g., for a linear model, we can generate all possible linear models with main effects.  As this  often produces too many models to possibly fit or compare, we typically employ some model selection algorithm to explore the space of ``best'' models, and only the best, or maybe the two or three best models are examined.
 
   \item During the the process of data analysis.  When analyzing a data set, we may create and discard many models in an attempt to reveal the salient features of the data.  It may be useful see all of these models simultaneously.
 
@@ -367,9 +367,9 @@ So far we have looked at visualizing a single model in the data space, but colle
 
 \end{itemize}
 
-What can we do if we want to visualize such a collection? One approach is to visualize all models simultaneously. This is the strategy of trace plots \citep{urbanek:2005}, which show hundreds of tree models simultaneously. This makes it possible to see the space of models, showing both the common and the unusual. However, in most cases we will not be able to view more than a couple of models simultaneously because they will overlap and obscure one another.
+What can we do if we want to visualize such a collection? One approach is to visualize all models simultaneously. This is the strategy of trace plots \citep{urbanek:2005}, which show hundreds of tree models simultaneously. This makes it possible to see the space of models, showing both the common and the unusual. However, in most cases we are not able to view more than a couple of models simultaneously because they will overlap and obscure one another.
 
-To work around this problem, we need to be able to fluidly explore smaller sets of interesting models. We can do this by calculating descriptive statistics on multiple levels, then using linked brushing to connect these statistics to one another and to displays of the model. These ideas grow out of exploratory model analysis \citep{unwin:2003aa,urbanek:2004} and draw on fundamental ideas of descriptive statistics \citep{bickel:1975a,bickel:1975b}. Here we focus on displays of model space, with the assumption that these displays will be linked to additional m-in-ds displays to help us tune our descriptive statistics to match the model features of interest.
+To work around this problem, we need to be able to fluidly explore smaller sets of interesting models. We can do this by calculating descriptive statistics on multiple levels, then using linked brushing to connect these statistics to one another and to displays of the model. These ideas grow out of exploratory model analysis \citep{unwin:2003aa,urbanek:2004} and draw on fundamental ideas of descriptive statistics \citep{bickel:1975a,bickel:1975b}. Here we focus on displays of model space, with the assumption that these displays are linked to additional m-in-ds displays to help us tune our descriptive statistics to match the model features of interest.
 
 The first level of descriptive statistics summarizes model quality: a trade-off between complexity and fit. Model complexity is often summarized by degrees of freedom, but there may be more informative measures for specific model families, e.g.,\ the number of hidden nodes in a neural network. The fit can be summarized by the likelihood at the parameter estimates of models fit using the {\sc ml} algorithm, or by some measure of predictive ability. These statistics help us explore overall model quality and the tradeoff between quality and complexity, but do not give any information about how the models differ, how the fit of a given observation varies between models, or what exactly the parameter estimates are.
 
@@ -384,7 +384,7 @@ To explore these aspects of the model, we need descriptive statistics at other l
 
 \end{itemize}
 
-For other models, we will need to develop and calculate our own descriptive statistics. Often there will be a large existing literature which can be probed for ideas. Another approach is to calculate a familiar summary statistic over an unfamiliar population. For example, we could calculate an observation-level summary by averaging the observation's residual over all the models. If models in the collection have common parameters, we might create parameter-level summaries of the distribution of the estimates over the models. The important thing is to generate descriptive statistics at multiple levels, in order to gain maximum insight into the models.
+For other models, we  need to develop and calculate our own descriptive statistics. Often there exists a large body of literature with suggestions for statistics. Another approach is to calculate a familiar summary statistic over an unfamiliar population. For example, we could calculate an observation-level summary by averaging the observation's residual over all the models. If models in the collection have common parameters, we might create parameter-level summaries of the distribution of the estimates over the models. The important thing is to generate descriptive statistics at multiple levels, in order to gain maximum insight into the models.
 
 Once we have computed the summary statistics, we need to explore them. Static plots are helpful, but make it difficult to link between summaries at different levels. For example, we might want to see how the model-estimate summaries differ between the best and second best models. Linked brushing is particularly useful here. We can have one plot of model-level statistics and one of model-estimate-level statistics and use brushing to link between them. This idea is described in more detail in the case study.
 
@@ -393,7 +393,7 @@ The {\sc raft} tool \citep{raft} for visualizing random forests provides a good 
 \subsection{Case study: Linear models}
 \label{sec:linear-models}
 
-In this case study we'll explore a collection of linear models containing a large subset of all possible main effects models. We will assume we have $m$ models describing a data set with $n$ observations and $p$ variables. If all possible main effects models are fit, there will be $2^p - 1$ models in the collection. We will explore summary statistics on five levels:
+In this case study we  explore a collection of linear models containing a large subset of all possible main effects models. Let us assume that we have $m$ models describing a data set with $n$ observations and $p$ variables. If all possible main effects models are fit, there are $m = 2^p - 1$ models in the collection. We  explore summary statistics on five levels:
 
 \begin{itemize} \itemsep 0in
   \item Model level: model fit statistics.  $m$ observations.
@@ -405,7 +405,8 @@ In this case study we'll explore a collection of linear models containing a larg
 
 \noindent The relationship between these different levels is shown schematically in Figure~\ref{fig:summaries}.
 
-In this case study, we will use a data set on 2006 house prices in New Haven, Connecticut \citep{emerson}. We are interested in predicting price based on characteristics of the house. There are 18221 observations and 6 predictor variables, giving a collection of 63 ($2^6 - 1$) models. The predictors include size of the living area ({\tt livingArea}), size of the house ({\tt size}), zone ({\tt zoneRM}), presence of air conditioning ({\tt acType}), number of bedrooms ({\tt bedrms}) and bathrooms ({\tt bathrooms}). We will focus on the the model and model-estimate level summaries. The remainder are discussed more fully in \citet{wickham:2007h}.
+In this case study, we  use a data set on 2006 house prices in New Haven, Connecticut \citep{emerson}. We are interested in predicting price based on characteristics of the house. There are 18,221 observations and 6 predictor variables, resulting in a collection of 63 ($2^6 - 1$) models. The predictors include size of the living area ({\tt livingArea}), size of the house ({\tt size}), zone ({\tt zoneRM}), presence of air conditioning ({\tt acType}), number of bedrooms ({\tt bedrms}) and bathrooms ({\tt bathrooms}). We  focus on the  model and model-estimate level summaries. The remainder are discussed more fully in \citet{wickham:2007h}.
+\hh{XXX what is the remainder? Could you be more specific?}
 
 \begin{figure}[htbp]
   \centering
@@ -469,7 +470,7 @@ Figure~\ref{fig:coef-upag} uses linked brushing to highlight these models and to
 
 These ideas are implemented in the {\tt meifly} package ({\bf m}odels {\bf e}xplored {\bf i}nteractively) \citep{meifly} which uses R to fit the models and calculate the summary statistics, and ggplot2 and GGobi to display them.
 
-\section{Don't just look at the final result; explore how the algorithm works}
+\section{Do not just look at the final result; explore how the algorithm works}
 \label{sec:iteration}
 
 Whenever we can gain insight into the process of model fitting, we should. Observing iterations helps us understand how the algorithm works and can reveal potential pitfalls. Developing suitable visualizations forces us to think deeply about exactly what the algorithm does and can suggest possible avenues for improvement. For some algorithms, it may be possible to intervene, contributing a more global perspective to help the algorithm escape local maxima.
@@ -480,7 +481,7 @@ This ordering suggests two approaches to visualization: ordering in space, to ma
 
 To capture the data we need for these plots, we can either stream data updates, replacing the values from the previous iteration; or store all iterations for later exploration.  Streaming updates allows us to intervene in the algorithm and observe the effect of our changes, while storing everything allows us to later run time forwards and backwards.  A particularly nice example of intervening in the progress of an algorithm is {\tt ggvis} \citep{buja:2008}, an interactive tool for multidimensional scaling that allows you to manually drag points out of local optima.
 
-Being able to extract this data is dependent on the implementation of the algorithm.  At a minimum we either need a hook into the algorithm which calls a function every $n$ iterations; or we need to be able to run the algorithm for a fixed number of steps, and to be able to start the fitting process from the results of a previous run.  This is not always straightforward as many algorithms also have time-varying parameters that must be captured and recreated. Typically, extracting and saving this data will considerably slow the algorithm, often by an order of magnitude.
+Being able to extract this data is dependent on the implementation of the algorithm.  At a minimum we either need a hook into the algorithm which calls a function every $n$ iterations; or we need to be able to run the algorithm for a fixed number of steps, and to be able to start the fitting process from the results of a previous run.  This is not always straightforward as many algorithms also have time-varying parameters that must be captured and recreated. Typically, extracting and saving this data  considerably slows the algorithm, often by an order of magnitude.
 
 The following two case studies illustrate some of these ideas.  The first case study, on projection pursuit, visualizes the use of simulated annealing to find interesting projections of the data.  The second case study explores the fitting process of self organizing maps, as implemented by the {\tt kohonen} package.
 
@@ -521,9 +522,9 @@ We can also use interaction with this plot to do something rather interesting: r
 \subsection{Case study: self organizing maps}
 \label{sub:som}
 
-A self-organizing map ({\sc som}) is a machine learning algorithm which  simultaneously performs clustering and dimension reduction \citep{kohonen:2001}. {\sc som}s are often described as a type of neural network, but they are more easily understood as a type of constrained k-means.   The idea is simple: we are wrapping a net of points into the data cloud. The knots in the net are called nodes, and are constrained by their neighbors.  Each node has a position in the data space (like a cluster centroid), and the model space (a grid coordinate on the net).  In this case study we will look at the self organizing maps implemented in the {\tt kohonen} package \citep{kohonen}.
+A self-organizing map ({\sc som}) is a machine learning algorithm which  simultaneously performs clustering and dimension reduction \citep{kohonen:2001}. {\sc som}s are often described as a type of neural network, but they are more easily understood as a type of constrained k-means.   The idea is simple: we are wrapping a net of points into the data cloud. The knots in the net are called nodes, and are constrained by their neighbors.  Each node has a position in the data space (like a cluster centroid), and the model space (a grid coordinate on the net).  In this case study we  look at the self organizing maps implemented in the {\tt kohonen} package \citep{kohonen}.
 
-We first need a method for visualizing the model in the data space.  The majority of {\sc som} displays show the data in the model space, and give little insight into the quality of the model.  An idea for a visualization comes immediately from the net metaphor: we'll display the data, the nodes, and the connections between neighboring nodes; a net wrapped through the data.  Figure~\ref{fig:bad-fit} contrasts a typical d-in-ms view (left) with a m-in-ds view (right) for 10 $\times$ 3 node som fit to the wine data. The d-in-ms view shows the positions of each of the nodes of the net using a Coxcomb display. Nodes in the middle of the net have large values on all variables, that is they are close to the (1,1,1,1,1) region in the data space, and nodes on the right and left side have all low values, indicating they are close to (0,0,0,0,0) region  in the data space, assuming the data falls inside a 5D unit cube. In contrast the m-in-ds view shows the nodes relative to the data points, and allows us to see how the model fits to the data, better evaluating the goodness-of-fit. In this one projection the model can be seen to be fairly linear in the 5D space, winding through the three clusters.
+We first need a method for visualizing the model in the data space.  The majority of {\sc som} displays show the data in the model space, and give little insight into the quality of the model.  An idea for a visualization comes immediately from the net metaphor: we  display the data, the nodes, and the connections between neighboring nodes; a net wrapped through the data.  Figure~\ref{fig:bad-fit} contrasts a typical d-in-ms view (left) with a m-in-ds view (right) for 10 $\times$ 3 node som fit to the wine data. The d-in-ms view shows the positions of each of the nodes of the net using a Coxcomb display. Nodes in the middle of the net have large values on all variables, that is they are close to the (1,1,1,1,1) region in the data space, and nodes on the right and left side have all low values, indicating they are close to (0,0,0,0,0) region  in the data space, assuming the data falls inside a 5D unit cube. In contrast the m-in-ds view shows the nodes relative to the data points, and allows us to see how the model fits to the data, better evaluating the goodness-of-fit. In this one projection the model can be seen to be fairly linear in the 5D space, winding through the three clusters.
 
 \begin{figure}[htb]
   \centering
@@ -545,7 +546,7 @@ The algorithm for fitting a {\sc som} is very similar to k-means, but instead of
   \item Decrease $\alpha$ and $r$, and repeat step 2 until stopping condition is met
 \end{enumerate}
 
-For the wine dataset, we'll fit a 10 $\times$ 3 net: we know the data seems to fall along a 1d path, but maybe there's something interesting along another dimension.  To record the progress of the model fit, we'll save the following information at each of 100 iterations: the positions of the nodes, the values of $r$ and $\alpha$, and the distance from each point to its corresponding node.
+For the wine dataset, we  fit a 10 $\times$ 3 net: we know the data seems to fall along a 1d path, but  we want to allow for potential structures along another dimension.  To record the progress of the model fit, we  save the following information at each of 100 iterations: the positions of the nodes, the values of $r$ and $\alpha$, and the distance from each point to its corresponding node.
 
 Figure~\ref{fig:som-dist} summarizes the quality of the model fit over time, by plotting the distance between each point and its corresponding node.  Looking at the mean alone is misleading: there is a dramatic drop in mean distance when switching from a radius of three to two.  However, when we look at the complete distribution, we can see that this drop is small compared to the total variation.  We also see a number of outlying points that never get close to a node.  The variation in those lines might also make us wonder if we have stopped the algorithm too soon.
 
@@ -569,7 +570,7 @@ To see how the model changes over time, Figure~\ref{fig:iteration} displays the 
   \label{fig:iteration}
 \end{figure}
 
-When we first used this package, it was not possible to break up the iterations into single steps, because there wasn't sufficient control over the changes to $r$ and $\alpha$.   After asking the package author to give access to the iterations, this visualization revealed some problems with the implementation of the {\sc som}.   The m-in-ds visualization also revealed that the nets were twisted and tangled up.  The author has since fixed these initial bugs.
+When we first used this package, it was not possible to break up the iterations into single steps, because there was not sufficient control over the changes to $r$ and $\alpha$.   After asking the package author to give access to the iterations, this visualization revealed some problems with the implementation of the {\sc som}.   The m-in-ds visualization also revealed that the nets were twisted and tangled up.  The author has since fixed these initial bugs.
 
 \section{Pulling it all together: Visualizing neural networks}
 \label{sec:nnet}
@@ -577,15 +578,15 @@ When we first used this package, it was not possible to break up the iterations 
 This case study pulls together all three themes of the paper to develop visualizations that investigate the fit of single-hidden-layer neural networks, as implemented by the {\tt nnet} package \citep{mass}.  Much like self organizing maps, neural networks are often treated as black boxes, and are used purely for prediction and not to give insight into the data. We want to dig deeper, and explore how they work, how well they work, and what we need to do to get the best performance.  This longer case study is broken up into three parts:
 
 \begin{itemize} \itemsep 0in
-  \item  In Section~\ref{sub:minds} we will develop a visualization of the output of the neural network in the data space, based on ideas from the classification section.
+  \item  In Section~\ref{sub:minds} we  develop a visualization of the output of the neural network in the data space, based on ideas from the classification section.
 
-  \item The definition of neural networks reveals that they are an ensemble model, composed of multiple logistic regressions. In Section~\ref{sub:ensemble} this insight will lead us to develop a visualization that shows what the internal sub-models are doing.
+  \item The definition of neural networks reveals that they are an ensemble model, composed of multiple logistic regressions. In Section~\ref{sub:ensemble} this insight  leads us to develop a visualization that shows what the internal sub-models are doing.
 
   \item The parameters of a neural network are estimated with a numerical method and often get stuck in local optima.  Section~\ref{sub:starts} explores why this happens and how to ensure we get a good fit, by visualizing many random starts and the process of iteration.
 
 \end{itemize}
 
-We will illustrate this section with a simple two class, two dimension, classification problem, shown in Figure~\ref{fig:nnet-test}. The two classes can be completely separated by a non-linear boundary, easily drawn in by hand: the human neural network can easily solve this problem! Even a simple linear classifier does well on this dataset, correctly classifying 92\% of the points. This is a simple problem but it reveals many interesting features of neural networks.
+We illustrate this section with a simple two class, two dimension, classification problem, shown in Figure~\ref{fig:nnet-test}. The two classes can be completely separated by a non-linear boundary, easily drawn in by hand: the human neural network can easily solve this problem! Even a simple linear classifier does well on this dataset, correctly classifying 92\% of the points. This is a simple problem but it reveals many interesting features of neural networks.
 
 \begin{figure}[htbp]
   \centering
@@ -597,7 +598,7 @@ We will illustrate this section with a simple two class, two dimension, classifi
 \subsection{Model in data space}
 \label{sub:minds}
 
-Assume we have been given a fitted neural network model.  How can we visualize it?  The basic output from the model is a prediction surface for each class, giving the probability that a new observation at $(x, y)$ belongs to that class.  In the two class case, we only need to look at one of these surfaces, as the two probabilities must sum up to 1.  To visualize this surface, we have two basic options, shown in Figure~\ref{fig:nnet-best}. We could draw an image plot showing the probability at each location, or summarize the shape with a few contour lines, here at 10\%, 25\%, 50\%, 75\% and 90\%.  The 50\% boundary determines whether a new observation will be classified as class A or B.  Both displays show that the boundary does what we intuitively expect, and that the classification boundary is very sharp; this classifier is quite certain which class a new observation should be given.
+Assume we have been given a fitted neural network model.  How can we visualize it?  The basic output from the model is a prediction surface for each class, giving the probability that a new observation at $(x, y)$ belongs to that class.  In the two class case, we only need to look at one of these surfaces, as the two probabilities must sum up to 1.  To visualize this surface, we have two basic options, shown in Figure~\ref{fig:nnet-best}. We could draw an image plot showing the probability at each location, or summarize the shape with a few contour lines, here at 10\%, 25\%, 50\%, 75\% and 90\%.  The 50\% boundary determines whether a new observation is classified as class A or B.  Both displays show that the boundary does what we intuitively expect, and that the classification boundary is very sharp; this classifier is quite certain which class a new observation should be given.
 
 \begin{figure}[htbp]
   \centering
@@ -610,7 +611,7 @@ Assume we have been given a fitted neural network model.  How can we visualize i
 \subsection{Looking at multiple models: ensemble}
 \label{sub:ensemble}
 
-A single-hidden-layer neural network is composed of a set of sub-models, logistic regressions, whose outputs are combined using another logistic regression.  In the terminology of neural networks, the sub-models are hidden nodes, and the number of these nodes is the single most important tuning parameter.  The hope is that these sub-models will identify important lower-level features which can then be combined to reveal important high-level features, much in the same way that biological neural networks (brains) work.
+A single-hidden-layer neural network is composed of a set of sub-models, logistic regressions, whose outputs are combined using another logistic regression.  In the terminology of neural networks, the sub-models are hidden nodes, and the number of these nodes is the single most important tuning parameter.  The hope is that these sub-models  identify important lower-level features which can then be combined to reveal important high-level features, much in the same way that biological neural networks (brains) work.
 
 To be more precise, the probability that unit $y$ with values $x_{1}, ..., x_{p}$ belongs to class $j$ is
 
@@ -635,7 +636,7 @@ This plot hints at some of the difficulties faced when estimating the model para
 \subsection{Looking at multiple models: random starts}
 \label{sub:starts}
 
-The parameters of the neural network are estimated by numerical optimization.  Neural networks often converge to local optima and it is customary to try multiple random starts to find the global optima.  For our dataset, we will try 200 random starts each for neural networks with 2, 3 and 4 hidden nodes.  This gives a total of 600 neural networks fit to the data.   Figure~\ref{fig:nnet-many} summarizes the results. There is a striking variation in the ability of the neural network to correctly separate the two classes, with prediction accuracy ranging from 80\% to 100\%.  Most of the networks correctly classify 92\% of the points, no better than a linear boundary.  Only one network classifies the training data perfectly!  Interestingly, increasing the number of nodes doesn't affect the predictive ability of the majority of the networks, but, surprisingly, does increase the number of very good and very bad models.
+The parameters of the neural network are estimated by numerical optimization.  Neural networks often converge to local optima and it is customary to try multiple random starts to find the global optima.  For our dataset, we  try 200 random starts each for neural networks with two, three and four hidden nodes.  This gives a total of 600 neural networks fit to the data.   Figure~\ref{fig:nnet-many} summarizes the results. There is a striking variation in the ability of the neural network to correctly separate the two classes, with prediction accuracy ranging from 80\% to 100\%.  Most of the networks correctly classify 92\% of the points, no better than a linear boundary.  Only one network classifies the training data perfectly!  Interestingly, increasing the number of nodes does not affect the predictive ability of the majority of the networks, but, surprisingly, does increase the number of very good and very bad models.
 
 \begin{figure}[htbp]
   \centering
@@ -667,14 +668,14 @@ We can also use this same idea to explore the process of model fitting, treating
 
 \subsection{Real data}
 
-Even though we have used a very simple example we have still discovered many interesting features of the neural network algorithm.  In real life the neural network will be considerably more complicated: more data points, more internal nodes, and more possible classes.  However, we can continue to use the same ideas, with a few tweaks:
+Even though we have used a very simple example we have still discovered many interesting features of the neural network algorithm.  In real life the neural network is considerably more complicated due to more data points, more internal nodes, and more possible classes.  However, we can continue to use the same ideas, with a few tweaks:
 
 \begin{itemize} \itemsep 0in
-  \item If there are more than two classes, we can no longer summarize the model with a single probability surface, but we will need one for each class.  When computing classification boundaries we will need to use the advantage statistic developed in Section~\ref{sub:classifly}.
+  \item If there are more than two classes, we can no longer summarize the model with a single probability surface, but we  need one for each class.  When computing classification boundaries we  need to use the advantage statistic developed in Section~\ref{sub:classifly}.
 
-  \item If there are more than two input variables, we will need to use high-dimensional tools to visualize the classification surface.  These were also described in Section~\ref{sub:classifly}.
+  \item If there are more than two input variables, we  need to use high-dimensional tools to visualize the classification surface such as described in Section~\ref{sub:classifly}.
 
-  \item More data points shouldn't affect our choice of visualizations, but it will make the neural networks slower to fit.  This may affect our ability to try the many possible random starts necessary to find a good fit.
+  \item More data points should not affect our choice of visualizations, but it  makes the neural networks slower to fit.  This may affect our ability to try the many possible random starts necessary to find a good fit.
 
 \end{itemize}
 
