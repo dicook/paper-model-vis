@@ -1,6 +1,6 @@
-library(ggplot2)
-ggopt(grid.fill = "grey95")
-source("~/documents/reshape/reshape/load.r")
+#library(ggplot2)
+#ggopt(grid.fill = "grey95")
+#source("~/documents/reshape/reshape/load.r")
 
 wine <- read.csv("../1-data/wine.csv")
 winer <- rescaler(wine, "range")

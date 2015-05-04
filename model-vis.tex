@@ -285,9 +285,9 @@ Generating the complete prediction region is straightforward: sample many points
 
 If the classification function does not generate posterior probabilities, a $k$-nearest neighbors approach on the grid of predictions can be used. If the neighbors of a point are all the same class, then the point is not on a boundary.  This method can be applied to any classification function, but is slow, $O(n^2)$, because it computes all pairwise distances to find the nearest neighbors.  In practice, this imposes a limit of around 20,000 points.
 
-Figure~\ref{fig:svm-radial3} illustrates the results of a support vector machine \citep{cortes:1995} with radial kernel fitted to three variables from the wine data.  We see the purple region is contained almost completely inside the green region, except where it abuts the orange region. The boundaries and regions are straightforward to understand because our brains are adept at 3D modeling. The video at \url{http://www.vimeo.com/821284} explores the boundaries in another way, by brushing along the advantage variable. This shows that the boundaries are equally sharp between the different groups.
+Figure~\ref{fig:svm-radial3} illustrates the results of a support vector machine \citep{cortes:1995} with radial kernel fitted to three variables from the wine data.  We see the purple region is contained almost completely inside the green region, except where it abuts the orange region. The boundaries and regions are straightforward to understand because our brains are adept at 3D modeling. The video at \url{https://vimeo.com/125405961} explores the boundaries in another way, by brushing along the advantage variable. This shows that the boundaries are equally sharp between the different groups.
 
-As we move beyond 3D it gets harder to see what is going on, but if we persevere we can find informative views. Figure~\ref{fig:svm-poly5} shows three informative views of a polynomial kernel with five variables.  It looks like the boundary is relatively flat (linear) between the orange and purple groups, but quadratic around the green group.  This is easier to see interactively, as at \url{http://vimeo.com/823271}.
+As we move beyond 3D it gets harder to see what is going on, but if we persevere we can find informative views. Figure~\ref{fig:svm-poly5} shows three informative views of a polynomial kernel with five variables.  It looks like the boundary is relatively flat (linear) between the orange and purple groups, but quadratic around the green group.  This is easier to see interactively, as at \url{https://vimeo.com/125405962}.
 
 \begin{figure}[htbp]
   \centering
@@ -297,7 +297,7 @@ As we move beyond 3D it gets harder to see what is going on, but if we persevere
     \includegraphics[width=2in]{3-classifly/svm-radial-4}
     \includegraphics[width=2in]{3-classifly/svm-radial-5}
     \includegraphics[width=2in]{3-classifly/svm-radial-6}
-  \caption{Views of a 3D radial {\sc svm} classifier on the wine data using the variables color, phenols, and flavonoids. The same projection is shown with selected subsets of all of the features. (Top left) Data only, (Top middle) Boundary points between the three groups, revealing the highly non-linear decision regions, (Top right) Prediction region for the purple group shown illustrating the way that the classifier wraps the boundary tightly around this group, (Bottom left) Prediction region for the orange group carves out a slice of the cube, (Bottom middle) Prediction region for the green group is basically the rest of the cube, (Bottom right) all three prediction regions colored showing how the cube is carved into the three prediction regions.  Animated version available at \url{http://vimeo.com/821284}.}
+  \caption{Views of a 3D radial {\sc svm} classifier on the wine data using the variables color, phenols, and flavonoids. The same projection is shown with selected subsets of all of the features. (Top left) Data only, (Top middle) Boundary points between the three groups, revealing the highly non-linear decision regions, (Top right) Prediction region for the purple group shown illustrating the way that the classifier wraps the boundary tightly around this group, (Bottom left) Prediction region for the orange group carves out a slice of the cube, (Bottom middle) Prediction region for the green group is basically the rest of the cube, (Bottom right) all three prediction regions colored showing how the cube is carved into the three prediction regions.  Animated version available at \url{https://vimeo.com/125405961}.}
   \label{fig:svm-radial3}
 \end{figure}
 
@@ -307,7 +307,7 @@ As we move beyond 3D it gets harder to see what is going on, but if we persevere
     \includegraphics[width=1.5in]{svm-poly2}
     \includegraphics[width=1.5in]{svm-poly3}
     \includegraphics[width=1.5in]{svm-poly4}
-  \caption{Views of a 5d {\sc svm} with polynomial kernel on the wine data using the variables color, phenols, flavonoids, proline and dilution.  It's possible to see that the boundaries are largely linear, with a ``bubble'' of green pushing into the orange and purple.  A video presentation of this tour is available at \url{http://vimeo.com/823271}.}
+  \caption{Views of a 5d {\sc svm} with polynomial kernel on the wine data using the variables color, phenols, flavonoids, proline and dilution.  It's possible to see that the boundaries are largely linear, with a ``bubble'' of green pushing into the orange and purple.  A video presentation of this tour is available at \url{https://vimeo.com/125405962}.}
   \label{fig:svm-poly5}
 \end{figure}
 
