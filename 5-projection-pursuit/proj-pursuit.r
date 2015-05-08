@@ -19,7 +19,7 @@ load("5-projection-pursuit/trace.rda")
 
 ggplot(trace_df, aes(step, index, group = trace)) +
   geom_line() +
-  geom_point() +
+  geom_point(size = 1) +
   ylim(c(0, NA))
 ggsave("5-projection-pursuit/pp-index-progression.pdf", width = 8, height = 4)
 
