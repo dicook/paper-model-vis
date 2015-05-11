@@ -1,0 +1,60 @@
+\documentclass[preprint]{imsart}
+%\bibliographystyle{asa}
+\usepackage{fullpage}
+
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.png,.pdf}
+\graphicspath{{3-classifly/}{3-hclust/}{3-manova/}{3-tools/}{4-meifly/}{5-projection-pursuit/}{5-som/}{6-nnet/}}
+
+\usepackage{hyperref}
+\usepackage{color}
+\definecolor{slateblue}{rgb}{0.07,0.07,0.488}
+\hypersetup{colorlinks=true,linkcolor=slateblue,anchorcolor=slateblue,citecolor=slateblue,filecolor=slateblue,urlcolor=slateblue,bookmarksnumbered=true,pdfview=FitB}
+
+\usepackage[usenames,dvipsnames]{xcolor}
+\newcommand{\hh}[1]{{\color{ForestGreen} #1}}
+
+
+\usepackage[small]{caption}
+\usepackage{url}
+\usepackage[round,sort&compress,sectionbib]{natbib}
+\usepackage{amsmath}
+
+\startlocaldefs
+\DeclareMathOperator{\Normal}{Normal}
+\DeclareMathOperator{\logit}{logit}
+\endlocaldefs
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Authors' Response to Discussants}
+\runtitle{Visualizing statistical models}
+\begin{aug}
+\author{\fnms{Hadley} \snm{Wickham}\corref{}\ead[label=e1]{hadley@rice.edu}},
+\author{\fnms{Dianne} \snm{Cook}\ead[label=e2]{dcook@iastate.edu}}
+\and
+\author{\fnms{Heike} \snm{Hofmann}\ead[label=e3]{hofmann@iastate.edu}}
+
+\affiliation{Rice University}
+\address{Department of Statistics MS-138\\6100 Main St\\Houston TX 77081\\ \printead{e1}}
+
+\affiliation{Iowa State University}
+\address{Department of Statistics\\2415 Snedecor Hall\\Ames IA 50011-1210\\ \printead{e2}}
+
+\affiliation{Iowa State University}
+\address{Department of Statistics\\2413 Snedecor Hall\\Ames IA 50011-1210\\ \printead{e3}}
+
+\end{aug}
+\end{frontmatter}
+
+We very much appreciate the insights and additional material provided by the discussants. In the world of big data, visualization becomes so  important on many fronts - communication of information to a broad audience, diagnosis of analytical methods, exploration - but it becomes increasingly nebulous with large volumes of data. Using analytical procedures to process the data can make a problem initially tractable. 
+
+Allen et al (2015)  provides an example of the principle "visualizing the process of model fitting" outlined in our paper, successfully applied to big data. In the process of visualizing distributed optimizations, they realized that the same results could be obtained by a single optimization using a range of parameters, which was further validated by theoretical work. It was the visualization that led them to this discovery. They also provide areas in machine learning with big data where "visualizing members of the collection" could be applied to yield better models. The third principle of "visualizing the model in the data space" is where they see less scope for use with big data. They outline several key issues - overplotting of huge numbers of points, distributed data, mixed data types, high-dimension with few samples - which provide challenges for applying the principle. And we agree. We have given some examples for data containing only quantitative variables. So we issue these as challenges to new statistical graphics and data visualization researchers, to advance our methodology so that glimpses of the model in the data space can be made. What is important is to build a synergy of model fitting, and visualization, and where possible show components of the model in some space of the data. The methods described in the various articles written by Simon Urbanek (referenced in main article)  illustrate some starting points. 
+
+
+
+\bibliography{../references}
+
+\end{document}
