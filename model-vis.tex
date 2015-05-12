@@ -330,7 +330,7 @@ Agglomerative hierarchical clustering methods \citep{hartigan:1975a} build up cl
 
 To do better we need to display the model in data space.  \citet{buja:1996} draws inspiration from the dendrogram and suggests an interesting idea: connect the observations in the data space according to their hierarchy in the clustering.  For intermediate nodes in the hierarchy, representing clusters containing more than one point, we supplement the data with extra points located at the cluster centroid.   An extension would be to connect clusters in the same way as inter-cluster distances are calculated, i.e.,\ connect closest points for single linkage, most distant for complete, and centroids for Wards.  Another approach is described in \citet{kim:2000} which uses {\sc mds} for dimension reduction, and overlays the minimum spanning tree.
 
-Figure~\ref{fig:wine-ggobi} displays some views of the wine dataset supplemented with a hierarchical clustering with Wards linkage.  It is easy to see the three groups and the hierarchical links in the tour, as shown at \url{http://www.vimeo.com/768329}.
+Figure~\ref{fig:wine-ggobi} displays some views of the wine dataset supplemented with a hierarchical clustering with Wards linkage.  It is easy to see the three groups and the hierarchical links in the tour, as shown at \url{https://vimeo.com/127614079}.
 
 \begin{figure}[htbp]
   \centering
@@ -558,7 +558,7 @@ Figure~\ref{fig:som-dist} summarizes the quality of the model fit over time, by 
   \label{fig:som-dist}
 \end{figure}
 
-To see how the model changes over time, Figure~\ref{fig:iteration} displays the model in the data space for four selected iterations.  A movie showing more iterations, more views of the model, and interaction between the model and model summaries is available at \url{http://vimeo.com/823541}.  It's interesting to note that the green and orange clusters are close in the data space, but distant in the model space.  We could improve our {\sc som} model by joining the two ends.  We also might have expected that the middle of the net would go through the green group, not the purple group, but this is likely a function of the initialization. With increasing iterations the model expands out and is closer to joining the two ends, but also becomes more twisted. It may be too many iterations.
+To see how the model changes over time, Figure~\ref{fig:iteration} displays the model in the data space for four selected iterations.  A movie showing more iterations, more views of the model, and interaction between the model and model summaries is available at \urlhttps://vimeo.com/127615225}.  It's interesting to note that the green and orange clusters are close in the data space, but distant in the model space.  We could improve our {\sc som} model by joining the two ends.  We also might have expected that the middle of the net would go through the green group, not the purple group, but this is likely a function of the initialization. With increasing iterations the model expands out and is closer to joining the two ends, but also becomes more twisted. It may be too many iterations.
 
 \begin{figure}[htb]
   \centering
